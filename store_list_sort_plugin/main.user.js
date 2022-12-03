@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SortFavoriteStoresInYahooShopping
 // @namespace    https://github.com/LorseKudos
-// @version      0.3
+// @version      0.4
 // @description  ヤフーショッピングのお気に入りページにあるストア一覧をソートします。ついでに値上げテキストを青色にします。
 // @author       Lorse
 // @updateURL    https://github.com/LorseKudos/custom_userscript/raw/main/store_list_sort_plugin/main.user.js
@@ -168,31 +168,49 @@ function cssInnerText(selector, metaOrInnerTextRegExp, innerTextOrStyle, styleOr
   }
 }
 
+function changeDiscountColor(){
+    const discountTextClassPrefix = "style_ItemList__itemDiscount__";
+    cssInnerText(`[class^="${discountTextClassPrefix}"]`, '*=', '円↑', 'color: blue !important;');
+    cssInnerText(`[class^="${discountTextClassPrefix}"]`, '*=', '円↓', 'color: pink !important;');
+}
+
+function waitUntilDisplayElements(selector) {
+    if($(selector).length > 0){
+        return;
+    }
+    window.setTimeout(() => waitUntilDisplayElements(selector), 100);
+}
 
 (function() {
     'use strict';
-    const discountTextClassPrefix = "style_ItemList__itemDiscount__"
-    cssInnerText(`[class^="${discountTextClassPrefix}"]`, '*=', '円↑', 'color: blue !important;');
-    cssInnerText(`[class^="${discountTextClassPrefix}"]`, '*=', '円↓', 'color: pink !important;');
+
+    const target = $('#favitem')[0];
+    const observer = new MutationObserver((mutations) => {
+        changeDiscountColor()
+    });
+    const config = {
+        childList: true,
+        characterData: true,
+        subtree: true
+    };
+    observer.observe(target, config);
 
     const storeClassPrefix = "style_Filter__seller__"
     const storeElSelector = `li[class^="${storeClassPrefix}"]`
-    function waitUntilDisplayStores() {
-        if($(storeElSelector).length > 0){
-            return;
-        }
-        window.setTimeout(() => waitUntilDisplayStores(), 100);
-    }
-    waitUntilDisplayStores();
+    waitUntilDisplayElements(storeElSelector);
 
-    let storeNameToElement = $(storeElSelector).toArray().reduce((dic,el) => {
+    changeDiscountColor();
+
+    const storeNameToElement = $(storeElSelector).toArray().reduce((dic,el) => {
         dic[el.innerText] = el;
         return dic;
     }, {});
-    let sortedStores = Object.keys(storeNameToElement).sort().reverse();
+    //const collator = new Intl.Collator('ja');
+    //const sortedStores = Object.keys(storeNameToElement).sort(collator.compare).reverse();
+    const sortedStores = Object.keys(storeNameToElement).sort((a,b) => b.localeCompare(a));
 
-    for(let store of sortedStores){
-        let elementToInsert = storeNameToElement[store];
+    for(const store of sortedStores){
+        const elementToInsert = storeNameToElement[store];
         elementToInsert.parentElement.insertBefore(elementToInsert,$(storeElSelector)[0]);
     }
 })();
