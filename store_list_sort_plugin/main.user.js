@@ -4,6 +4,8 @@
 // @version      0.1
 // @description  ヤフーショッピングのお気に入りページにあるストア一覧をソートします
 // @author       Lorse
+// @updateURL    https://github.com/LorseKudos/custom_userscript/raw/main/store_list_sort_plugin/main.user.js
+// @downloadURL  https://github.com/LorseKudos/custom_userscript/raw/main/store_list_sort_plugin/main.user.js
 // @match        https://shopping.yahoo.co.jp/my/wishlist/item*
 // @grant        none
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js
