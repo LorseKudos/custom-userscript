@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         SortFavoriteStoresInYahooShopping
 // @namespace    https://github.com/LorseKudos
-// @version      0.4
-// @description  ヤフーショッピングのお気に入りページにあるストア一覧をソートします。ついでに値上げテキストを青色にします。
+// @version      0.5
+// @description  ヤフーショッピングのお気に入りページにあるストア一覧をソートします。ついでに値段変更テキストの色を変更します。
 // @author       Lorse
 // @updateURL    https://github.com/LorseKudos/custom_userscript/raw/main/store_list_sort_plugin/main.user.js
 // @downloadURL  https://github.com/LorseKudos/custom_userscript/raw/main/store_list_sort_plugin/main.user.js
@@ -205,8 +205,6 @@ function waitUntilDisplayElements(selector) {
         dic[el.innerText] = el;
         return dic;
     }, {});
-    //const collator = new Intl.Collator('ja');
-    //const sortedStores = Object.keys(storeNameToElement).sort(collator.compare).reverse();
     const sortedStores = Object.keys(storeNameToElement).sort((a,b) => b.localeCompare(a));
 
     for(const store of sortedStores){
