@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SortFavoriteStoresInYahooShopping
 // @namespace    https://github.com/LorseKudos
-// @version      0.5
+// @version      0.6
 // @description  ヤフーショッピングのお気に入りページにあるストア一覧をソートします。ついでに値段変更テキストの色を変更します。
 // @author       Lorse
 // @updateURL    https://github.com/LorseKudos/custom-userscript/raw/main/store-list-sort-plugin/main.user.js
@@ -171,7 +171,7 @@ function cssInnerText(selector, metaOrInnerTextRegExp, innerTextOrStyle, styleOr
 function changeDiscountColor(){
     const discountTextClassPrefix = "style_ItemList__itemDiscount__";
     cssInnerText(`[class^="${discountTextClassPrefix}"]`, '*=', '円↑', 'color: blue !important;');
-    cssInnerText(`[class^="${discountTextClassPrefix}"]`, '*=', '円↓', 'color: pink !important;');
+    cssInnerText(`[class^="${discountTextClassPrefix}"]`, '*=', '円↓', 'color: pink !important; text-align: right !important;');
 }
 
 function waitUntilDisplayElements(selector) {
